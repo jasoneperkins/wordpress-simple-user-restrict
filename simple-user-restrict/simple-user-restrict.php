@@ -68,19 +68,19 @@ class SimpleUserRestrictPlugin
 
     // HTML for IP Whitelist textarea
     function whitelistHTML()
-    { ?>
+    {?>
         <div class="sur_whitelist__flex-container">
             <textarea name="sur_whitelist" id="sur_whitelist" placeholder="xx.xxx.xxx.xxx, xxxx:xxx:xxxx:xxxx:xxxx:xxxx:xxxx:xxxx"><?php echo esc_textarea(get_option('sur_whitelist')) ?></textarea>
         </div>
-<?php  }
+		<?php}
 
     function authUser()
     {
-        $activated      = get_option(sur_activate);
-        $loggedIn        = is_user_logged_in();    // True if user is logged in.
-        $whiteList        = array_map('trim', explode(',', get_option('sur_whitelist'))); // Array of IP addresses allowed whether logged in or not.
-        $whiteListed    = in_array($_SERVER['REMOTE_ADDR'], $whiteList); // True if user's IP address is in the list of whitelisted addresses.
-        $authenticated    = $loggedIn || $whiteListed; // True if user is allowed to view folders and files (logged in or whitelisted).
+        $activated			= get_option(sur_activate);
+        $loggedIn				= is_user_logged_in();    // True if user is logged in.
+        $whiteList			= array_map('trim', explode(',', get_option('sur_whitelist'))); // Array of IP addresses allowed whether logged in or not.
+        $whiteListed		= in_array($_SERVER['REMOTE_ADDR'], $whiteList); // True if user's IP address is in the list of whitelisted addresses.
+        $authenticated	= $loggedIn || $whiteListed; // True if user is allowed to view folders and files (logged in or whitelisted).
 
         // Allow AJAX processes.
         if (is_admin() || wp_doing_ajax()) {
@@ -89,7 +89,7 @@ class SimpleUserRestrictPlugin
 
         // Redirect unauthenticated users to the WordPress login page.
         if ($activated && !$authenticated) {
-            wp_redirect(esc_url(wp_login_url()), 307);
+            wp_safe_redirect(esc_url(wp_login_url()), 307);
             exit;
         }
     }
